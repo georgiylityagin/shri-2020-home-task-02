@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 8</title>
+</head>
+
+<body>
+  <h2>Вариант 8</h2>
+
+  <script src="shri-async-hw.js"></script>
+  <script src="map.js"></script>
+
+  <script>
+    const {
+      AsyncArray,
+      add,
+      subtract,
+      multiply,
+      divide,
+      mod,
+      less,
+      equal,
+      lessOrEqual,
+      sqrt
+    } = Homework;
+
+    const a = new AsyncArray([1, 10, 20, 30, 389, 873]);
+
+    console.log("Исходный массив");
+    a.print();
+
+    map(a, value => value + 1000, result => {
+      console.log('Увеличим каждый элемент на 1000:');
+      result.print()
+    })
+
+    map(a, value => Math.sqrt(value), result => {
+      console.log('Возьмём квадратный корень');
+      result.print()
+    })
+
+
+  </script>
+</body>
+
+</html>
