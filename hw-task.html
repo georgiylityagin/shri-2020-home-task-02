@@ -9,41 +9,45 @@
 
 <body>
   <h2>Вариант 8</h2>
+  <p>Реализовать операцию map для асинхронного массива.</p>
+  <pre>
+    function map(
+        array: AsyncArray,
+        fn: (cur: any, idx: Number, src: AsyncArray) => any,
+        cb: (result: AsyncArray) => void) {
+
+    }
+  </pre>
 
   <script src="shri-async-hw.js"></script>
-  <script src="map.js"></script>
 
   <script>
-    const {
-      AsyncArray,
-      add,
-      subtract,
-      multiply,
-      divide,
-      mod,
-      less,
-      equal,
-      lessOrEqual,
-      sqrt
-    } = Homework;
+    const promisifyAsyncFunction = (fn, ...args) => {
+      return new Promise(resolve => {
+        fn(...args, result => resolve(result));
+      });
+    }
 
-    const a = new AsyncArray([1, 10, 20, 30, 389, 873]);
+    const map = async (array, fn, cb) => {
+      let length = await promisifyAsyncFunction(array.length);
+      let results = new AsyncArray();
 
-    console.log("Исходный массив");
-    a.print();
+      let index = 0;
+      let check = await promisifyAsyncFunction(less, index, length)
 
-    map(a, value => value + 1000, result => {
-      console.log('Увеличим каждый элемент на 1000:');
-      result.print()
-    })
+      while (check) {
+        let currentValue = await promisifyAsyncFunction(array.get, index);
+        let newValue = fn(currentValue, index, array);
+        promisifyAsyncFunction(results.push, newValue);
 
-    map(a, value => Math.sqrt(value), result => {
-      console.log('Возьмём квадратный корень');
-      result.print()
-    })
+        index = await promisifyAsyncFunction(add, index, 1);
+        check = await promisifyAsyncFunction(less, index, length);
+      }
 
-
+      cb(results);
+    };
   </script>
+
 </body>
 
 </html>
