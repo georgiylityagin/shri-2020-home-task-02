@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Бонусные задачи</title>
+</head>
+
+<body>
+  <h2>Бонусные задачи</h2>
+  <p>
+    Реализовать в отдельном файле собственную версию методов:
+    <ul>
+      <li>Promise.any</li>
+      <li>Promise.allSettled</li>
+      <li>Promise.prototype.finally</li>
+    </ul>
+  </p>
+
+  <script>
+    Promise._any = (promises) => {
+      return Promise.all(
+        promises.map(promise => promise
+          .then(value => Promise.reject(value))
+          .catch(error => Promise.resolve(error)))
+      )
+        .then(errors => Promise.reject(errors))
+        .catch(value => Promise.resolve(value));
+    }
+
+
+    Promise._allSettled = (promises) => {
+      return Promise.all(
+        promises.map(promise => promise
+          .then(value => Promise.resolve({ status: "fulfilled", value: value }))
+          .catch(error => Promise.resolve({ status: "rejected", reason: error }))))
+    }
+
+
+    Promise.prototype._finally = function (cb) {
+      return this.then(
+        value => Promise.resolve(cb()).then(() => value),
+        error => Promise.resolve(cb()).then(() => { throw error })
+      )
+    }
+
+  </script>
+
+</body>
+
+</html>
